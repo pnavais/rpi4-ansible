@@ -5,10 +5,14 @@ ansible_python_interpreter: auto_silent
 rpi_username: alarm
 rpi_password: alarm
 
+# Default timezone
+timezone: "Europe/Madrid"
 
+# Ansible sudo password
 ansible_sudo_pass: "{{ rpi_username }}"
+
 # Defines the ansible user to use when connecting to devices
-#ansible_user: "{{ rpi_username }}"
+ansible_user: "{{ rpi_username }}"
  
 # Defines the ansible password to use when connecting to devices
 #ansible_password: "{{ rpi_password }}"

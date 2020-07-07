@@ -8,9 +8,9 @@ k3s_rpi_master
 #ansible_python_interpreter=/usr/bin/python
  
 [k3s_rpi_master]
-k3s-rpi1 ansible_host=192.168.0.139
+master-pi ansible_host=192.168.0.139
 
 #[k3s_rpi_worker]
-#k3s-rpi2 ansible_host=192.168.50.201
-#k3s-rpi3 ansible_host=192.168.50.202
-#k3s-rpi4 ansible_host=192.168.50.203
+#worker-01 ansible_host=192.168.50.201
+#worker-02 ansible_host=192.168.50.202
+#worker-03 ansible_host=192.168.50.203
