@@ -1,0 +1,48 @@
+---
+- hosts: k3s_rpi
+  become: yes
+  tasks:
+
+    - name: Set hostname
+      hostname:
+        name: "{{ inventory_hostname }}"
+
+    - name: Configure local hostname
+      template:
+        src: "hosts.j2"
+        dest: "/etc/hosts"
+        owner: "root"
+        group: "root"
+        mode: 0644
+
+    - name: Configure nss-mdns
+      lineinfile:
+        path: /etc/nsswitch.conf
+        regexp: '^hosts: (.+)(?<! mdns_minimal \[NOTFOUND=return\]) resolve (.*)$'
+        line: 'hosts:\1 mdns_minimal [NOTFOUND=return] resolve \2'
+        backrefs: yes
+
+    - name: Enable & start avahi-daemon service
+      systemd:
+        name: avahi-daemon
+        enabled: yes
+        state: started
+
+    - name: Configure static IP address
+      template:
+        src: "eth0.network.j2"
+        dest: "/etc/systemd/network/eth0.network"
+        owner: "root"
+        group: "root"
+        mode: 0644
+
+    - name: Remove eth global configuration
+      file:
+        path: /etc/systemd/network/eth.network
+        state: absent
+
+    - name: Restart network
+      systemd: 
+        name: systemd-networkd
+        state: restarted
+        no_block: yes

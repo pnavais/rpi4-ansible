@@ -1,0 +1,4 @@
+---
+- import_playbook: prepare-system.yml
+- import_playbook: setup-packages.yml
+- import_playbook: network.yml

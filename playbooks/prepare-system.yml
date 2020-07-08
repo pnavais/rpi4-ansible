@@ -2,6 +2,28 @@
 - hosts: k3s_rpi
   become: yes
   tasks:
+
+    - name: Initialize pacman keyring
+      command: pacman-key --init
+      changed_when: False
+
+    - name: Initial setup of master keys
+      command: pacman-key --populate archlinuxarm
+      changed_when: False
+
+    - name: Update and upgrade pacman packages
+      pacman:
+        update_cache: yes
+        upgrade: yes
+
+    - name: Install common packages
+      pacman:
+        name:
+          - base-devel
+          - avahi
+          - nss-mdns
+        state: present
+
     - name: Set timezone to {{ timezone }}
       timezone:
         name: "{{ timezone }}"
@@ -18,69 +40,14 @@
       command: timedatectl set-ntp true
       when: ntp_disabled|bool
 
-    - name: Set hostname
-      hostname:
-        name: "{{ inventory_hostname }}"
+    - name: Create AUR builder user
+      user:
+        name: aur_builder
+        group: wheel
 
-    - name: Initialize pacman keyring
-      command: pacman-key --init
-      changed_when: False
-
-    - name: Initial setup of master keys
-      command: pacman-key --populate archlinuxarm
-      changed_when: False
-
-    - name: Update and upgrade pacman packages
-      pacman:
-        update_cache: yes
-        upgrade: yes
-
-#    - name: Install common packages
-#      pacman:
-#        name:
-#          - base-devel
-#          - man-db
-#          - zsh
-#          - vim
-#          - git
-#          - curl
-#          - wget
-#          - the_silver_searcher
-#          - cowsay
-#          - fortune-mod
-#          - figlet
-#          - lolcat
-#          #- nodejs
-#          #- npm
-#          #- python3
-#          #- python-pip
-#        state: present
-
-    - name: Install expect module
-      pip:
-        name: pexpect
-
-    - name: Install AUR command
-      shell:
-        cmd: bash <(curl -s https://archibold.io/install/aur)
-        creates: /usr/bin/aur
-      args:
-        executable: /usr/bin/bash
-
-    - name: Install yay from AUR
-      become: no
-      expect:
-        command: aur yay
-        responses:
-          (?i)password: "{{ rpi_password }}"
-        timeout: 300
-        creates: /usr/bin/yay
-
-    - name: Install raspi-config from AUR
-      become: no
-      expect:
-        command: aur raspi-config
-        responses:
-          (?i)password: "{{ rpi_password }}"
-        timeout: 300
-        creates: /usr/bin/yay
+    - name: Add sudoers permissions to AUR builder
+      lineinfile:
+        path: /etc/sudoers.d/11-install-aur_builder
+        line: 'aur_builder ALL=(ALL) NOPASSWD: /usr/bin/pacman'
+        create: yes
+        validate: 'visudo -cf %s'

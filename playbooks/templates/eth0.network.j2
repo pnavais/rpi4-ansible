@@ -1,0 +1,10 @@
+[Match]
+Name=eth0
+{% set ip_range = rpi_host_start -%}
+
+[Network]
+Address=192.168.0.{{ ip_range }}/24
+Gateway=192.168.0.1
+DNS=8.8.8.8
+DNS=8.8.4.4
+{% set ip_range = ip_range + 1 %}

@@ -8,7 +8,7 @@ k3s_rpi_master
 #ansible_python_interpreter=/usr/bin/python
  
 [k3s_rpi_master]
-master-pi ansible_host=192.168.0.139
+master-pi ansible_host=192.168.0.140
 
 #[k3s_rpi_worker]
 #worker-01 ansible_host=192.168.50.201

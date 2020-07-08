@@ -1,0 +1,44 @@
+---
+- hosts: k3s_rpi
+  roles:
+    - kewlfft.aur # AUR manager installed through ansible-galaxy
+  become: yes
+  tasks:
+    - name: Install utility packages
+      pacman:
+        name:
+          - man-db
+          - zsh
+          - vim
+          - git
+          - curl
+          - wget
+          - the_silver_searcher
+          - cowsay
+          - fortune-mod
+          - figlet
+          - lolcat
+          - nodejs
+          - npm
+          - python3
+          - python-pip
+        state: present
+
+    - name: Install Python modules
+      pip:
+        name: pexpect
+
+    - name: Install AUR command
+      shell:
+        cmd: bash <(curl -s https://archibold.io/install/aur)
+        creates: /usr/bin/aur
+      args:
+        executable: /usr/bin/bash
+
+    - name: Install yay from AUR
+      become: yes
+      become_user: aur_builder
+      command: aur yay
+      args:
+        creates: /usr/bin/yay
+        warn: no
