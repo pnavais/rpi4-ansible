@@ -22,6 +22,8 @@
           - base-devel
           - avahi
           - nss-mdns
+          - net-tools
+          - inetutils
           - docker
           - docker-compose
         state: present
