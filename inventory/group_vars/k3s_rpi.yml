@@ -1,12 +1,15 @@
 ---
+# Globals
+#########
+
 ansible_python_interpreter: auto_silent
+
+# Users and groups
+##################
 
 # Default raspberry pi login
 rpi_username: alarm
 rpi_password: alarm
-
-# Default timezone
-timezone: "Europe/Madrid"
 
 # Ansible sudo password
 ansible_sudo_pass: "{{ rpi_username }}"
@@ -17,5 +20,23 @@ ansible_user: "{{ rpi_username }}"
 # Defines the ansible password to use when connecting to devices
 #ansible_password: "{{ rpi_password }}"
 
+dev_user: pnavais
+dev_password: $6$/agdOKJ$domD4feB6OQmVDbyjNTirbQtgeA647YlUT0tsBCMbV0/i3r0F8N5nvcdZtnS2TBWdQPg03otWdGTAUNCsEyrD/
+dev_group: dev
+def_group: wheel
+dev_directory: /Projects
+dot_files_repo_url: http://github.com/pnavais/dotfiles.git
+dot_files_repo_version: master
+
+# Hosts
+#######
+
 # Start range for rpi hosts
 rpi_host_start: 120
+
+# System config
+###############
+
+# Default timezone
+timezone: "Europe/Madrid"
+locale: "en_US.UTF-8"

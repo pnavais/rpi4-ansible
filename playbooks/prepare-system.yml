@@ -22,7 +22,20 @@
           - base-devel
           - avahi
           - nss-mdns
+          - docker
+          - docker-compose
         state: present
+
+    - name: Generate locale {{ locale }}
+      locale_gen:
+          name: "{{ locale }}"
+          state: present
+
+    - name: Set system locale to {{ locale }}
+      copy:
+        dest: /etc/locale.conf
+        content: |
+          LANG={{ locale }}
 
     - name: Set timezone to {{ timezone }}
       timezone:
@@ -32,18 +45,24 @@
       shell:
         cmd: "timedatectl status | grep -i 'NTP service: inactive'"
       register: ntp_disabled
-      changed_when: "'inactive' in ntp_disabled.stdout"
+      changed_when: False
       failed_when: ntp_disabled.rc >=2
       ignore_errors: yes
 
     - name: Enable NTP time synchronization
       command: timedatectl set-ntp true
-      when: ntp_disabled|bool
+      when: ntp_disabled.stdout is search("inactive")
+
+    - name: Enable & start docker service
+      systemd:
+        name: docker
+        enabled: yes
+        state: started
 
     - name: Create AUR builder user
       user:
         name: aur_builder
-        group: wheel
+        group: "{{ def_group }}"
 
     - name: Add sudoers permissions to AUR builder
       lineinfile:
@@ -51,3 +70,20 @@
         line: 'aur_builder ALL=(ALL) NOPASSWD: /usr/bin/pacman'
         create: yes
         validate: 'visudo -cf %s'
+
+    - name: Disable audit messages during boot
+      replace:
+        path: /boot/cmdline.txt
+        regexp: '^root=(.+)(?<!audit=0)$'
+        replace: 'root=\1 audit=0'
+
+    - name: Silence kernel messages
+      copy:
+        dest: /etc/sysctl.d/20-quiet-printk.conf
+        content: |
+          kernel.printk = 3 3 3 3
+
+    - name: Set GPIO rules
+      copy:
+        src: 99-gpio.rules
+        dest: /etc/udev/rules.d

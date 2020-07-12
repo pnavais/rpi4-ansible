@@ -1,16 +1,11 @@
 [k3s_rpi:children]
 k3s_rpi_master
 #k3s_rpi_worker
-
-# Not recommended in Ansible, prefer separated config files for each host or group
-#[k3s_rpi:vars] 
-# Provides actual Python path avoiding auto discovery
-#ansible_python_interpreter=/usr/bin/python
  
 [k3s_rpi_master]
-master-pi ansible_host=192.168.0.140
+master-pi ansible_host=192.168.0.120
 
 #[k3s_rpi_worker]
-#worker-01 ansible_host=192.168.50.201
-#worker-02 ansible_host=192.168.50.202
-#worker-03 ansible_host=192.168.50.203
+#worker-01 ansible_host=192.168.0.121
+#worker-02 ansible_host=192.168.0.122
+#worker-03 ansible_host=192.168.0.123

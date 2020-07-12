@@ -1,0 +1,63 @@
+---
+- hosts: k3s_rpi
+  become: yes
+  tasks:
+
+    - name: Create development group {{ dev_group }}
+      group:
+        name: "{{ dev_group }}"
+        state: present
+
+    - name: Create gpio group
+      group:
+        name: gpio
+        state: present
+
+    - name: Add development user {{ dev_user }}
+      user:
+        name: "{{ dev_user }}"
+        password: "{{ dev_password }}"
+        groups: "{{ def_group }},{{ dev_group }},gpio,docker"
+
+    - name: Set authorized key for development user from current user
+      authorized_key:
+        user: "{{ dev_user }}"
+        state: present
+        key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+
+    - name: Create development directory
+      file:
+        path: "{{ dev_directory }}"
+        state: directory
+        owner: "{{ dev_user }}"
+        group: "{{ dev_group }}"
+        mode: '0755'
+
+    - name: Retrieving dotfiles base directory
+      set_fact:
+        dotfiles_repo_target: "{{ dot_files_repo_url | basename | regex_replace('^(.+).git$','\\1') }}"
+
+    - name: Retrieving dotfiles target directory
+      set_fact:
+        dotfiles_dir: "{{ dev_directory }}/{{ dotfiles_repo_target }}"
+
+    - name: Clone dotfiles
+      git:
+        repo: '{{ dot_files_repo_url }}'
+        dest: "{{ dotfiles_dir }}"
+        version: "{{ dot_files_repo_version }}"
+
+    - name: Set dotfiles permissions
+      file:
+        path: "{{ dotfiles_dir }}"
+        group: "{{ dev_group }}"
+        mode: '0775'
+        recurse: yes
+
+    - name: Create vi symbolic link
+      file:
+        src: /usr/bin/vim
+        dest: /usr/bin/vi
+        owner: root
+        group: root
+        state: link

@@ -42,7 +42,7 @@
         state: absent
 
     - name: Restart network
-      systemd: 
+      systemd:
         name: systemd-networkd
         state: restarted
         no_block: yes
