@@ -36,6 +36,7 @@
           - unzip
           - python3
           - python-pip
+          - python-pylint
         state: present
 
     - name: Install AUR command
