@@ -2,7 +2,7 @@
 
 ![stability-wip](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg)
 
-Ansible config &amp; playbooks for Raspberry pi 4 K3S cluster
+Ansible config &amp; playbooks for Raspberry Pi 4 K3S cluster
 
 ## Rationale
 This project contains Ansible playbooks allowing to provision from the ground up a K3S cluster of Raspberry Pi 4 based on ArchLinux ARM with both 64-bit Kernel and userland (see [rpi4-arch](https://github.com/pnavais/rpi4-arch) for OS installation).
