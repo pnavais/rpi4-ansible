@@ -10,7 +10,6 @@ This project contains Ansible playbooks allowing to provision from the ground up
 <table>
  <tr>
   <td><img width="330" height="465" alt="K3S Cluster" src="images/k3s_cluster_2.png"></td>
-  <td><img width="330" height="465" alt="K3S Cluster" src="images/k3s_cluster_3.png"></td>
   <td><img width="330" height="465" alt="K3S Cluster" src="images/k3s_cluster_1.png"></td>
 </table>
 
