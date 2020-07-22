@@ -7,7 +7,7 @@ Ansible config &amp; playbooks for Raspberry pi 4 K3S cluster
 ## Rationale
 This project contains Ansible playbooks allowing to provision from the ground up a K3S cluster of Raspberry Pi 4 based on ArchLinux ARM with both 64-bit Kernel and userland (see [rpi4-arch](https://github.com/pnavais/rpi4-arch) for OS installation).
 
-![K3S Cluster](images/k3s_cluster.png "K3S Cluster")
+<img width="530" height="665" alt="K3S Cluster" src="images/k3s_cluster_1.png">
 
 ## How to use it
 
