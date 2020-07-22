@@ -66,3 +66,33 @@
   file:
     path: "/tmp/{{ crictl_package }}"
     state: absent
+
+- name: Retrieve latest kubectl release
+  delegate_to: localhost
+  run_once: true
+  become: no
+  changed_when: False
+  shell:
+    cmd: curl -s "{{ kubectl_releases_url }}"
+  args:
+      warn: no
+  register: kubectl_release
+
+- name: Set kubectl URL and package name
+  set_fact:    
+    kubectl_url: "{{ kubectl_download_base_url }}/{{ kubectl_release.stdout }}/bin/linux/arm64/kubectl"
+
+- name: Delete kubectl if already present
+  file:
+    path: /usr/local/bin/kubectl
+    state: absent
+
+- name: Download kubectl package arm64
+  get_url:
+    url: "{{ kubectl_url }}"
+    dest: "/usr/local/bin/kubectl"
+    owner: root
+    group: root
+    mode: 0755
+
+

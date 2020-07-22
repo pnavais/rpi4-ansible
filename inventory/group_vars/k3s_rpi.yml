@@ -6,6 +6,8 @@ ansible_python_interpreter: auto_silent
 
 k3s_releases_url: "https://api.github.com/repos/rancher/k3s/releases/latest"
 crictl_releases_url: "https://api.github.com/repos/kubernetes-sigs/cri-tools/releases/latest"
+kubectl_releases_url: "https://storage.googleapis.com/kubernetes-release/release/stable.txt"
+kubectl_download_base_url: "https://storage.googleapis.com/kubernetes-release/release"
 
 # Users and groups
 ##################
