@@ -1,0 +1,38 @@
+---
+- hosts: k3s_rpi_workers
+  remote_user: pi
+  gather_facts: False
+
+  tasks:
+    - name: Shutdown workers
+      command: /sbin/shutdown -h now
+      become: True
+      ignore_errors: yes
+      ignore_unreachable: True
+      changed_when: False
+
+    - name: Wait for {{ ansible_host }} to go down
+      wait_for:
+        host: "{{ ansible_host }}"
+        port: 22
+        state: stopped
+      delegate_to: localhost
+
+- hosts: k3s_rpi_master
+  remote_user: pi
+  gather_facts: False
+
+  tasks:
+    - name: Shutdown master
+      command: /sbin/shutdown -h now
+      become: True
+      ignore_errors: yes
+      ignore_unreachable: True
+      changed_when: False
+
+    - name: Wait for master to go down
+      wait_for:
+        host: "{{ master_ip }}"
+        port: 22
+        state: stopped
+      delegate_to: localhost

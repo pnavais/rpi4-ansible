@@ -87,5 +87,10 @@
 
     - name: Set GPIO rules
       copy:
-        src: 99-gpio.rules
+        src: rules/99-gpio.rules
+        dest: /etc/udev/rules.d
+
+    - name: Set I2C rules
+      copy:
+        src: rules/45-i2c.rules
         dest: /etc/udev/rules.d

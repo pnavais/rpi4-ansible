@@ -25,6 +25,7 @@
           - bat
           - fd
           - git
+          - tldr
           - curl
           - wget
           - htop
@@ -33,10 +34,12 @@
           - fortune-mod
           - figlet
           - lolcat
+          - zip
           - unzip
           - python3
           - python-pip
           - python-pylint
+          - i2c-tools
         state: present
 
     - name: Install AUR command
@@ -65,4 +68,4 @@
 
     - name: Install Python modules
       pip:
-        name: pexpect,RPi.GPIO,spidev,smbus,blinkt
+        name: pexpect,RPi.GPIO,spidev,i2clcd,blinkt

@@ -4,6 +4,9 @@
 
 ansible_python_interpreter: auto_silent
 
+k3s_releases_url: "https://api.github.com/repos/rancher/k3s/releases/latest"
+crictl_releases_url: "https://api.github.com/repos/kubernetes-sigs/cri-tools/releases/latest"
+
 # Users and groups
 ##################
 
@@ -20,6 +23,7 @@ ansible_user: "{{ rpi_username }}"
 # Defines the ansible password to use when connecting to devices
 #ansible_password: "{{ rpi_password }}"
 
+dev_name: Pablo Navais
 dev_user: pnavais
 dev_password: $6$/agdOKJ$domD4feB6OQmVDbyjNTirbQtgeA647YlUT0tsBCMbV0/i3r0F8N5nvcdZtnS2TBWdQPg03otWdGTAUNCsEyrD/
 dev_group: dev
@@ -27,6 +31,8 @@ def_group: wheel
 dev_directory: /Projects
 dot_files_repo_url: http://github.com/pnavais/dotfiles.git
 dot_files_repo_version: master
+
+root_password: $6$b//6riQSO$BY3TuuZwpXd6mLFrHlycm0uJiB1X.6bFSLohUGcaGDIizLfYf45DtSAQSOGV/P/oRYX9Lwkql.aO7UpPNBPyy/
 
 # Hosts
 #######
@@ -40,3 +46,16 @@ rpi_host_start: 120
 # Default timezone
 timezone: "Europe/Madrid"
 locale: "en_US.UTF-8"
+
+systemd_dir: /etc/systemd/system
+
+
+# K3S
+#####
+
+master_name: "{{ groups['k3s_rpi_master'][0] }}"
+net_spec: "192.168.0"
+master_ip: "{{ net_spec }}.{{ rpi_host_start }}"
+#master_ip: "{{ hostvars[master_name].ansible_host }}"
+extra_server_args: "--docker --bind-address 0.0.0.0"
+extra_agent_args: "--docker"

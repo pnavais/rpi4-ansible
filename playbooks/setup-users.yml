@@ -13,11 +13,47 @@
         name: gpio
         state: present
 
+    - name: Create i2c group
+      group:
+        name: i2c
+        state: present
+
+    - name: Check if i2c is enabled
+      command: "raspi-config nonint get_i2c"
+      register: i2c_disabled
+      changed_when: i2c_disabled.stdout == "1"
+
+    - name: Enable i2c
+      command: "raspi-config nonint do_i2c 0"
+      when: i2c_disabled.stdout == "1"
+
     - name: Add development user {{ dev_user }}
       user:
         name: "{{ dev_user }}"
         password: "{{ dev_password }}"
-        groups: "{{ def_group }},{{ dev_group }},gpio,docker"
+        comment: "{{ dev_name }}"
+        groups: "{{ def_group }},{{ dev_group }},gpio,i2c,docker"
+
+    - name: Change root password
+      user:
+        name: root
+        password: "{{ root_password }}"
+
+    - name: Create root bashrc
+      copy:
+        dest: ~/.bashrc
+        content: |
+          #!/bin/env/ bash
+          if [ -f ~/.bash_profile ]; then
+              source ~/.bash_profile
+          fi
+
+    - name: Set root bash_profile
+      copy:
+        dest: ~/.bash_profile
+        content: |
+          # Custom fancy prompt
+          export PS1=$'\[\e[36m\][\[\e[31m\]\u@\h:\[\e[33m\]\w\[\e[36m\]]$\[\e[39m\] '
 
     - name: Set authorized key for development user from current user
       authorized_key:
@@ -46,6 +82,7 @@
         repo: '{{ dot_files_repo_url }}'
         dest: "{{ dotfiles_dir }}"
         version: "{{ dot_files_repo_version }}"
+        force: yes
 
     - name: Set dotfiles permissions
       file:

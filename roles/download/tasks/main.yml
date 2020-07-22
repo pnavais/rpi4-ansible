@@ -1,0 +1,68 @@
+---
+- name: Delete k3s if already present
+  file:
+    path: /usr/local/bin/k3s
+    state: absent
+
+- name: Retrieve latest k3s release
+  delegate_to: localhost
+  run_once: true
+  become: no
+  changed_when: False
+  shell:
+    cmd: curl -s "{{ k3s_releases_url }}" | grep "tag_name\":" | cut -d":" -f2 | cut -d"\"" -f2
+  args:
+      warn: no
+  register: k3s_release
+
+- name: Set K3S version
+  set_fact:
+    k3s_version: "{{ k3s_release.stdout }}"
+
+- name: Download k3s binary arm64
+  get_url:
+    url: https://github.com/rancher/k3s/releases/download/{{ k3s_version }}/k3s-arm64
+    dest: /usr/local/bin/k3s
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Retrieve latest crictl release
+  delegate_to: localhost
+  run_once: true
+  become: no
+  changed_when: False
+  shell:
+    cmd: curl -s "{{ crictl_releases_url }}"  | grep "browser_download_url\":" | grep "crictl.*\-arm64" | cut -d"\"" -f4
+  args:
+      warn: no
+  register: crictl_release
+
+- name: Set crictl URL and package name
+  set_fact:
+    crictl_url: "{{ crictl_release.stdout }}"
+    crictl_package: "{{ crictl_release.stdout | basename }}"
+
+- name: Download crictl package arm64
+  get_url:
+    url: "{{ crictl_url }}"
+    dest: "/tmp/{{ crictl_package }}"
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Delete crictl if already present
+  file:
+    path: /usr/local/bin/crictl
+    state: absent
+
+- name: Install crictl package
+  unarchive:
+    src: "/tmp/{{ crictl_package }}"
+    dest: /usr/local/bin
+    remote_src: yes
+
+- name: Remove temporary files
+  file:
+    path: "/tmp/{{ crictl_package }}"
+    state: absent

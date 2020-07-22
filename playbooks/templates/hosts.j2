@@ -1,3 +1,10 @@
+{% 	set ns = namespace(ip_range=rpi_host_start) -%}
 127.0.0.1	localhost
 ::1		localhost
 127.0.0.1	{{ inventory_hostname }}.localdomain {{ inventory_hostname }}
+{% for host in groups['k3s_rpi'] %}
+{% if inventory_hostname != host -%}
+{% 	set ns.ip_range = rpi_host_start + (loop.index - 1) -%}
+{{ net_spec }}.{{ ns.ip_range}}	{{ host }}
+{% endif %}
+{% endfor %}
