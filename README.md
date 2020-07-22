@@ -70,7 +70,9 @@ In order to install and setup K3S in both master and worker hosts execute the fo
 > ansible-playbook playbooks/k3s-setup.yml
 ```
 
-After a copule of minutes, we should have a working Kubernetes cluster up and running : 
+After a couple of minutes, we should have a working Kubernetes cluster up and running : 
+
+![k3s_up_and_running](images/k3s_up_and_running.png "K3S Up & Running")
 
 ## Auxiliary utilities
 
