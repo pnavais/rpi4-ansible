@@ -39,14 +39,14 @@ To check everything is working fine execute :
 > ansible -m ping k3s_rpi
 ```
 
-Which should acknowledge with something similar to : 
+Which should acknowledge something similar to : 
 
 ![Ansible Ping](images/ansible_ping.png "Ansible Ping")
 
 Modify the hosts configuration variables file `inventory/group_vars/k3s_rpi.yml` to change default user information (`dev_user`) and custom configuration (e.g. Timezone, preferred static IP addresses, ...).
 
 ### Pre-requirements
-Provided a sane environment with Python3/pip/Ansible already in place, install external roles from galaxy by executing : 
+Provided a sane environment with Python3/pip/Ansible already in place, install external roles from galaxy with : 
 
 ```
 > ansible-galaxy install -r requirements.yml
