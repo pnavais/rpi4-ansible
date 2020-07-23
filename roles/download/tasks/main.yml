@@ -1,32 +1,4 @@
 ---
-- name: Delete k3s if already present
-  file:
-    path: /usr/local/bin/k3s
-    state: absent
-
-- name: Retrieve latest k3s release
-  delegate_to: localhost
-  run_once: true
-  become: no
-  changed_when: False
-  shell:
-    cmd: curl -s "{{ k3s_releases_url }}" | grep "tag_name\":" | cut -d":" -f2 | cut -d"\"" -f2
-  args:
-      warn: no
-  register: k3s_release
-
-- name: Set K3S version
-  set_fact:
-    k3s_version: "{{ k3s_release.stdout }}"
-
-- name: Download k3s binary arm64
-  get_url:
-    url: https://github.com/rancher/k3s/releases/download/{{ k3s_version }}/k3s-arm64
-    dest: /usr/local/bin/k3s
-    owner: root
-    group: root
-    mode: 0755
-
 - name: Retrieve latest crictl release
   delegate_to: localhost
   run_once: true
@@ -72,15 +44,14 @@
   run_once: true
   become: no
   changed_when: False
-  shell:
-    cmd: curl -s "{{ kubectl_releases_url }}"
-  args:
-      warn: no
+  uri:
+    url: "{{ kubectl_releases_url }}"
+    return_content: yes
   register: kubectl_release
 
 - name: Set kubectl URL and package name
-  set_fact:    
-    kubectl_url: "{{ kubectl_download_base_url }}/{{ kubectl_release.stdout }}/bin/linux/arm64/kubectl"
+  set_fact:
+    kubectl_url: "{{ kubectl_download_base_url }}/{{ kubectl_release.content | regex_replace('\n', '') }}/bin/linux/arm64/kubectl"
 
 - name: Delete kubectl if already present
   file:
@@ -94,5 +65,3 @@
     owner: root
     group: root
     mode: 0755
-
-

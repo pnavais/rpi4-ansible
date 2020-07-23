@@ -1,28 +1,22 @@
 ---
-- name: Disable services
-  systemd:
-    name: "{{ item }}"
-    state: stopped
-    enabled: no
-  failed_when: false
-  with_items:
-    - k3s
-    - k3s-node
+- name: Uninstall k3s and stop services on master
+  command: /usr/local/bin/k3s-uninstall.sh
+  args:
+    removes: /usr/local/bin/k3s
+  when: "inventory_hostname == groups['k3s_rpi_master'][0]"
 
-- name: Remove service files, binaries and data
+- name: Uninstall k3s and stop services on workers
+  command: /usr/local/bin/k3s-agent-uninstall.sh
+  args:
+    removes: /usr/local/bin/k3s
+  when: "inventory_hostname != groups['k3s_rpi_master'][0]"
+
+- name: Remove binaries and data
   file:
     name: "{{ item }}"
     state: absent
   with_items:
-    - "{{ systemd_dir }}/k3s.service"
-    - "{{ systemd_dir }}/k3s-node.service"
-    - /etc/rancher/k3s
-    - /var/lib/rancher/k3s
-    - /var/lib/kubelet
-    - /usr/local/bin/k3s
     - /usr/local/bin/crictl
+    - /usr/local/bin/kubectl
+    - /etc/crictl.yaml
     - ~{{ dev_user }}/.kube
-
-- name: daemon_reload
-  systemd:
-    daemon_reload: yes

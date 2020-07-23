@@ -1,0 +1,51 @@
+---
+- name: Add kubectl bash completions
+  shell:
+    cmd: kubectl completion bash > /usr/share/bash-completion/completions/kubectl
+    creates: /usr/share/bash-completion/completions/kubectl
+
+- name: Ensures kube config directory exists
+  file:
+    path: ~{{ dev_user }}/.kube
+    state: directory
+
+- name: Copy config file to user home directory
+  copy:
+    src: /etc/rancher/k3s/k3s.yaml
+    dest: ~{{ dev_user }}/.kube/config
+    remote_src: yes
+    owner: "{{ dev_user }}"
+
+- name: Configure crictl endpoints
+  copy:
+    dest: /etc/crictl.yaml
+    content: |
+      runtime-endpoint: unix:///run/k3s/containerd/containerd.sock
+      image-endpoint: unix:///run/k3s/containerd/containerd.sock
+
+- name: Wait for worker nodes to come up
+  become: yes
+  become_user: "{{ dev_user }}"
+  shell:
+    cmd: |
+      set -o pipefail
+      kubectl get nodes | grep {{ item }} | grep -i Ready | grep -iv NotReady | awk '{ print $1 }'
+  args:
+    executable: /bin/bash
+  register: node_ready
+  until: node_ready.rc == 0
+  changed_when: node_ready.rc == 0
+  failed_when: False
+  retries: 6
+  delay: 10
+  with_items:  "{{ groups['k3s_rpi_workers'] }}"
+
+- name: Set label on worker nodes
+  become: yes
+  become_user: "{{ dev_user }}"
+  command: kubectl label node {{ item }} node-role.kubernetes.io/worker=worker --overwrite
+  loop: "{{ groups['k3s_rpi_workers'] }}"
+  loop_control:
+    index_var: node_idx
+  when: item == node_ready.results[node_idx].stdout
+  changed_when: item == node_ready.results[node_idx].stdout

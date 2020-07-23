@@ -1,16 +1,17 @@
 ---
+- name: Install / upgrade k3s on worker nodes and connect to master
+  shell: 
+    cmd: |
+      set -o pipefail
+      curl -sfL https://get.k3s.io | \
+                K3S_URL=https://{{ master_ip }}:6443 \
+                K3S_TOKEN={{ hostvars[groups['k3s_rpi_master'][0]]['k3s_node_token'] }} \
+                INSTALL_K3S_EXEC='agent {{ extra_agent_args | default("") }}' sh -
+  args:
+    executable: /bin/bash
+  changed_when: False
 
-- name: Copy K3s service file
-  template:
-    src: "k3s.service.j2"
-    dest: "{{ systemd_dir }}/k3s-node.service"
-    owner: root
-    group: root
-    mode: 0755
-
-- name: Enable and check K3s service
+- name: Make sure k3s service is running on workers
   systemd:
-    name: k3s-node
-    daemon_reload: yes
-    state: restarted
-    enabled: yes
+    state: started
+    name: k3s-agent
