@@ -89,7 +89,7 @@ Execute the following playbook :
 
 The shutdown process will start with worker nodes and end up with the master host. This allows to visually display some info in the LCD display and LED before shutdown.
 
-### Uninstalling K3S the cluster
+### Uninstalling K3S from the cluster
 Execute the following playbook :
 
 ```
