@@ -68,7 +68,7 @@ which will execute in order:
 After successful execution the system will be ready for K3S setup.
 
 ### Execute the K3S playbook
-In order to install and setup K3S in both master and worker hosts execute the following sensible playbook : 
+In order to install and setup K3S in both master and worker hosts execute the following ansible playbook : 
 
 ```
 > ansible-playbook playbooks/k3s-setup.yml
