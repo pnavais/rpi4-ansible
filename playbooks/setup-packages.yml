@@ -5,71 +5,71 @@
   become: yes
   tasks:
 
-    # - name: Update pacman cache
-    #   pacman:
-    #     update_cache: yes
+    - name: Update pacman cache
+      pacman:
+        update_cache: yes
 
-    # - name: Install utility packages
-    #   pacman:
-    #     name:
-    #       - man
-    #       - man-db
-    #       - bash-completion
-    #       - net-tools
-    #       - bc
-    #       - zsh
-    #       - vim
-    #       - neovim
-    #       - tmux
-    #       - fzf
-    #       - lsd
-    #       - bat
-    #       - fd
-    #       - git
-    #       - tldr
-    #       - curl
-    #       - wget
-    #       - htop
-    #       - the_silver_searcher
-    #       - cowsay
-    #       - fortune-mod
-    #       - figlet
-    #       - lolcat
-    #       - zip
-    #       - unzip
-    #       - python3
-    #       - python-pip
-    #       - python-pylint
-    #       - i2c-tools
-    #     state: present
+    - name: Install utility packages
+      pacman:
+        name:
+          - man
+          - man-db
+          - bash-completion
+          - net-tools
+          - bc
+          - zsh
+          - vim
+          - neovim
+          - tmux
+          - fzf
+          - lsd
+          - bat
+          - fd
+          - git
+          - tldr
+          - curl
+          - wget
+          - htop
+          - the_silver_searcher
+          - cowsay
+          - fortune-mod
+          - figlet
+          - lolcat
+          - zip
+          - unzip
+          - python3
+          - python-pip
+          - python-pylint
+          - i2c-tools
+        state: present
 
-    # - name: Install AUR command
-    #   shell:
-    #     cmd: bash <(curl -s https://archibold.io/install/aur)
-    #     creates: /usr/bin/aur
-    #   args:
-    #     executable: /usr/bin/bash
+    - name: Install AUR command
+      shell:
+        cmd: bash <(curl -s https://archibold.io/install/aur)
+        creates: /usr/bin/aur
+      args:
+        executable: /usr/bin/bash
 
-    # - name: Install yay from AUR
-    #   aur: name=yay use=makepkg state=present
-    #   become: yes
-    #   become_user: aur_builder
+    - name: Install yay from AUR
+      aur: name=yay use=makepkg state=present
+      become: yes
+      become_user: aur_builder
 
-    # - name: Install extra packages using yay
-    #   aur:
-    #     use: yay
-    #     name:
-    #       - boxes
-    #       - toilet
-    #       - toilet-fonts
-    #       - python-pigpio-git
-    #       - raspi-config
-    #   become: yes
-    #   become_user: aur_builder
+    - name: Install extra packages using yay
+      aur:
+        use: yay
+        name:
+          - boxes
+          - toilet
+          - toilet-fonts
+          - python-pigpio-git
+          - raspi-config
+      become: yes
+      become_user: aur_builder
 
-    # - name: Install Python modules
-    #   pip:
-    #     name: pexpect,RPi.GPIO,spidev,i2clcd,blinkt
+    - name: Install Python modules
+      pip:
+        name: pexpect,RPi.GPIO,spidev,i2clcd,blinkt
 
     - name: Install custom Python wheels
       pip:
