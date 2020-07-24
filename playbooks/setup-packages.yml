@@ -16,6 +16,7 @@
           - man-db
           - bash-completion
           - net-tools
+          - rsync
           - bc
           - zsh
           - vim
@@ -76,3 +77,25 @@
         name:
           - https://github.com/pnavais/python-lab/raw/master/wheel/RPi_I2C_driver-0.1.0-py38-none-any.whl
           - https://github.com/pnavais/python-lab/raw/master/wheel/lcd_i2c-0.1.0-py38-none-any.whl
+
+    - name: Obtain additional figlet fonts
+      git:
+        repo: https://github.com/xero/figlet-fonts.git
+        dest: "/tmp/figlet-fonts/"
+        version: master
+        force: yes
+        update: yes
+
+    - name: Obtain figlet fonts directory
+      command: figlet -I2
+      register: figlet_font_dir
+      changed_when: False
+
+    - name: Install figlet fonts
+      shell: "mv /tmp/figlet-fonts/* {{ figlet_font_dir.stdout }}"
+      changed_when: False
+
+    - name: Remove temporary directory
+      file:
+        path: /tmp/figlet-fonts/
+        state: absent
