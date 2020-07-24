@@ -1,6 +1,4 @@
 # rpi4-ansible
-
-[![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
 [![GitHub license](https://img.shields.io/github/license/pnavais/rpi4-ansible)](https://github.com/pnavais/rpi4-ansible/blob/master/LICENSE)
 
 Ansible config &amp; playbooks for Raspberry Pi 4 K3S cluster
