@@ -1,5 +1,5 @@
 # rpi4-ansible
-[![GitHub license](https://img.shields.io/github/license/pnavais/rpi4-ansible)](https://github.com/pnavais/rpi4-ansible/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/pnavais/rpi4-ansible)](https://github.com/pnavais/rpi4-ansible/blob/master/LICENSE) <img src="https://img.shields.io/badge/stability-stable-green"/>
 
 Ansible config &amp; playbooks for Raspberry Pi 4 K3S cluster
 
