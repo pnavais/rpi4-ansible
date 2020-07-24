@@ -1,6 +1,6 @@
 # rpi4-ansible
 
-![stability-wip](https://img.shields.io/badge/stability-work_in_progress-lightgrey.svg)
+[![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
 
 Ansible config &amp; playbooks for Raspberry Pi 4 K3S cluster
 
