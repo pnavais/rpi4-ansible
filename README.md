@@ -17,7 +17,7 @@ This project contains Ansible playbooks allowing to provision from the ground up
 ### Configure the cluster
 Modify the file inventory hosts file `inventory/hosts.inv` with the configuration (ip addresses/hosts) to suit your needs.  
 
-The default configuration is based on 4 workers : 
+The default configuration is based on 3 workers : 
 ```YAML
 [k3s_rpi:children]
 k3s_rpi_master
