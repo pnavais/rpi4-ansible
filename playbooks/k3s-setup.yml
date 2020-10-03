@@ -1,21 +1,21 @@
 ---
-#- hosts: k3s_rpi
-#  gather_facts: yes
-#  become: yes
-#  roles:
-#    - role: prereq
-#    - role: download
-#    - role: arch
-#- hosts: k3s_rpi_master
-#  become: yes
-#  roles:
-#    - role: k3s/master
-#
-#- hosts: k3s_rpi_workers
-#  become: yes
-#  roles:
-#    - role: k3s/node
-#
+- hosts: k3s_rpi
+  gather_facts: yes
+  become: yes
+  roles:
+    - role: prereq
+    - role: download
+    - role: arch
+- hosts: k3s_rpi_master
+  become: yes
+  roles:
+    - role: k3s/master
+
+- hosts: k3s_rpi_workers
+  become: yes
+  roles:
+    - role: k3s/node
+
 - hosts: k3s_rpi_master
   become: yes
   roles:
