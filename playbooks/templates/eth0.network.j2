@@ -11,5 +11,5 @@ Name=eth0
 [Network]
 Address={{ net_spec }}.{{ ns.ip_range }}/24
 Gateway={{ net_spec }}.1
-DNS=8.8.8.8
-DNS=8.8.4.4
+DNS={{ dns_primary }}
+DNS={{ dns_secondary }}

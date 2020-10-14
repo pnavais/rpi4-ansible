@@ -42,6 +42,10 @@ root_password: $6$b//6riQSO$BY3TuuZwpXd6mLFrHlycm0uJiB1X.6bFSLohUGcaGDIizLfYf45D
 # Start range for rpi hosts
 rpi_host_start: 120
 
+# Name servers
+dns_primary: "8.8.8.8"
+dns_secondary: "8.8.4.4"
+
 # System config
 ###############
 
@@ -50,7 +54,6 @@ timezone: "Europe/Madrid"
 locale: "en_US.UTF-8"
 
 systemd_dir: /etc/systemd/system
-
 
 # K3S
 #####
