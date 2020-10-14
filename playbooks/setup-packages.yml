@@ -63,14 +63,14 @@
           - boxes
           - toilet
           - toilet-fonts
-          - python-pigpio-git
+          - python-raspberry-gpio
           - raspi-config
       become: yes
       become_user: aur_builder
 
     - name: Install Python modules
       pip:
-        name: pexpect,RPi.GPIO,spidev,i2clcd,blinkt
+        name: wheel,pexpect,spidev,i2clcd,blinkt
 
     - name: Install custom Python wheels
       pip:

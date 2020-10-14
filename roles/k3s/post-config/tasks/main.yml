@@ -16,6 +16,13 @@
     remote_src: yes
     owner: "{{ dev_user }}"
 
+- name : Change ownership of Kube directory
+  file:
+    path: ~{{ dev_user }}/.kube
+    owner: "{{ dev_user }}"
+    group: "{{ dev_group }}"
+    recurse: yes
+
 - name: Configure crictl endpoints
   copy:
     dest: /etc/crictl.yaml
